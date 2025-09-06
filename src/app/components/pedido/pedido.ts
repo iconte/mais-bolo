@@ -1,13 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, CommonModule } from '@angular/common';
 import { ProdutoService } from '../../produto.service';
 import { Produto } from '../../model/produto';
 import { Categoria } from '../../model/categoria';
-import { map } from 'rxjs';
 
 @Component({
   selector: 'app-pedido',
-  imports: [DecimalPipe],
+  imports: [DecimalPipe, CommonModule],
   templateUrl: './pedido.html',
   styleUrl: './pedido.css'
 })
@@ -21,6 +20,13 @@ export class Pedido implements OnInit {
   dadosCategoria: Categoria[] = [];
   produtosFiltrados: Produto[] = [];
   categoriaSelecionada: number | null = null;
+  produtoSelecionado:number | null = null;
+  produtosPedido: Array<{ produto: Produto; quantidade: number }> = [];
+  quantidadeSelecionada: number = 1;
+  produtoKitFestaSelecionado: boolean = false;
+  exibirItensKit: boolean = false;
+  exibirSelecaoMedidaCopoUnidade: boolean = false;
+
 
   constructor(private produtoService: ProdutoService) {
     this.passoAtual = 0;
@@ -65,54 +71,111 @@ export class Pedido implements OnInit {
     this.validarPassoAtual();
   }
   carregarCategorias() {
-    this.produtoService.getCategorias().subscribe((obj: any) => {
-      this.dadosCategoria = (obj.data as []).map((item: any) => ({
-        idCategoria: item.id_categoria,
-        nome: item.nome,
-      }));
-      console.log(this.dadosCategoria);
-    },
-      (error) => {
-        console.error('Erro ao carregar categorias:', error);
-      }
-
-    )
-
+    this.produtoService.getCategorias().subscribe({
+        next: (obj: any) => {
+          this.dadosCategoria = obj.data;
+        },
+        error: (error: any) =>  console.error('Erro ao carregar categorias:', error)
+      });
   }
 
   // Método para filtrar produtos por categoria
   onCategoriaChange(event: any) {
     const categoriaId = parseInt(event.target.value);
     if (isNaN(categoriaId) || !categoriaId) {
-      // Se nenhuma categoria selecionada, limpa a seleção
       this.categoriaSelecionada = null;
       this.produtosFiltrados = [];
     } else {
       this.categoriaSelecionada = categoriaId;
-      // Carrega produtos pela categoria selecionada e atualiza produtosFiltrados após o carregamento
       if (this.categoriaSelecionada) {
-        this.produtoService.getProdutosPorCategoriaId(this.categoriaSelecionada).subscribe((obj: any) => {
-          if (obj.data.length === 0) {
+        this.produtoService.getProdutosPorCategoriaId(this.categoriaSelecionada).subscribe({
+          next: (obj: any) => {
+            if (obj.data.length === 0) {
+              this.produtosFiltrados = [];
+            } else {
+              this.produtosFiltrados= obj.data;
+            }
+          },
+          error: (error: any) => {
+            console.error('Erro ao carregar produtos:', error);
             this.produtosFiltrados = [];
-          } else {
-            this.produtosFiltrados = (obj.data as []).map((item: any) => ({
-              id: item.id_produto,
-              nome: item.nome,
-              descricao: item.descricao,
-              categoria: item.categoria || null,
-              valor: item.valor || 0,
-              categoriaId: item.id_categoria
-            }));
           }
-        }, (error) => {
-          console.error('Erro ao carregar produtos:', error);
-          this.produtosFiltrados = [];
         });
       }
-      console.log('Categoria selecionada:', this.categoriaSelecionada);
-      console.log('Produtos filtrados:', this.produtosFiltrados);
     }
+  }
 
+  onChangeProduto(event: any) {
+    const produtoId = parseInt(event.target.value);
+    console.log('produto sel:', produtoId);
+    if (isNaN(produtoId) || !produtoId) {
+     this.desabilitarSelecaoCustomizarKitFesta();
+     this.desabilitarExibirSelecaoMedidaCopoUnidade();
+      return;
+    }
+    const produtoSelecionado = this.produtosFiltrados.find(p => p.id === produtoId);
+  if (produtoSelecionado) {
+    const categoriaKitFesta = this.dadosCategoria.find(cat => cat.descricao === 'Kits de Festa');
+    const categoriasExcluidas = ['Bolos', 'Kits de Festa', 'Descartáveis'];
+    const categoriasCopoCento: Categoria[] = this.dadosCategoria.filter(cat => !categoriasExcluidas.includes(cat.descricao));
+    const contemCopoCento = categoriasCopoCento.some(cat => cat.id === produtoSelecionado.idCategoria);
+    this.exibirSelecaoMedidaCopoUnidade = contemCopoCento;
+  
+    if(categoriaKitFesta){
+      this.produtoKitFestaSelecionado = produtoSelecionado.idCategoria === categoriaKitFesta.id;
+    }
+  
+  } else {
+    this.desabilitarSelecaoCustomizarKitFesta();
+  }
+  
+  }
+
+  onQuantidadeChange(event: any) {
+    const input = event.target as HTMLInputElement;
+    const qtd = parseInt(input.value, 10);
+    this.quantidadeSelecionada = isNaN(qtd) || qtd < 1 ? 1 : qtd;
+  }
+
+  onAdicionarProduto() {
+    const produto = this.produtosFiltrados.find(p => p.id === this.produtoSelecionado);
+    if (!produto) return;
+    const existente = this.produtosPedido.find(item => item.produto.id === produto.id);
+    if (existente) {
+      existente.quantidade += this.quantidadeSelecionada;
+    } else {
+      this.produtosPedido.push({ produto, quantidade: this.quantidadeSelecionada });
+    }
+    this.quantidadeSelecionada = 1;
+  }
+
+  onRemoverProduto(produtoId: number) {
+    this.produtosPedido = this.produtosPedido.filter(item => item.produto.id !== produtoId);
+  }
+
+  onAlterarQuantidade(produtoId: number, novaQtd: number) {
+    const item = this.produtosPedido.find(p => p.produto.id === produtoId);
+    if (item && novaQtd > 0) {
+      item.quantidade = novaQtd;
+    }
+  }
+
+  onEspecificarItensKit(){
+    const checkbox = document.getElementById('especificarItensKit') as HTMLInputElement;
+    if (checkbox) {
+      this.exibirItensKit = checkbox.checked;
+    }
+  }
+
+  desabilitarSelecaoCustomizarKitFesta(){
+     this.produtoKitFestaSelecionado = false;
+  }
+   desabilitarExibirSelecaoMedidaCopoUnidade(){
+     this.exibirSelecaoMedidaCopoUnidade = false;
+  }
+
+  getInputValue(event: Event): string {
+    return (event.target as HTMLInputElement)?.value || '';
+  }
 
   }
-}

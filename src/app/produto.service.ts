@@ -14,6 +14,12 @@ export class ProdutoService {
   
   constructor(private http: HttpClient) { }
 
+  getProdutoPorId(produtoId: number): Observable<Produto[]> {
+    // Faz uma requisição GET para obter a lista de produtos
+    console.log('Buscando produto por ID:', `${this.url}/${produtoId}`);
+    return this.http.get<Produto[]>(`${this.url}/${produtoId}`);
+  }
+
   getProdutosPorCategoriaId(categoriaId: number): Observable<Produto[]> {
     // Faz uma requisição GET para obter a lista de produtos
     return this.http.get<Produto[]>(`${this.url}/categoria/${categoriaId}`);

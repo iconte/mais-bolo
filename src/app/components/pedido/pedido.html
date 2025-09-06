@@ -129,48 +129,96 @@
                     }
 
                     @if(mostrarPasso(passo2)) {
+
+                    
                         <!-- Etapa 2: Pedido -->
                         <div id="step2" class="wizard-step" [class.d-none]="passoAtual!=passo2">
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                      <h5 class="mb-3">Categorias Disponíveis</h5>
                                         <div class="mb-3">
                                         <label for="categoriaSelect" class="form-label">Selecione uma Categoria</label>
-                                        <select id="categoriaSelect" class="form-select" (change)="onCategoriaChange($event)">
+                                        <select id="categoriaSelect" class="form-select w-50" (change)="onCategoriaChange($event)">
                                             <option  value="" selected>Escolha uma categoria</option>
                                             @for (categoria of dadosCategoria; track $index) {
-                                                <option value="{{categoria.idCategoria}}">{{categoria.nome}}</option>
+                                                <option value="{{categoria.id}}">{{categoria.descricao}}</option>
                                             }
                                             
                                         </select>
                                     </div> 
-                                    <h5 class="mb-3">Produtos Disponíveis</h5>
-                                        <div class="mb-3">
+                                    <h5 class="mb-3  pb-3">Produtos Disponíveis</h5>
+                                        <div class="mb-1">
                                         <label for="produtoSelect" class="form-label">Selecione um Produto</label>
-                                        <select id="produtoSelect" class="form-select" [disabled]="!categoriaSelecionada">
-                                            <option  value="" selected>
-                                                @if (!categoriaSelecionada) {
-                                                    Primeiro selecione uma categoria
-                                                } @else if (produtosFiltrados.length === 0) {
-                                                    Nenhum produto encontrado para esta categoria
-                                                } @else {
-                                                    Escolha um produto
-                                                }
-                                            </option>
+                                        <select id="produtoSelect" class="form-select w-50"   (change)="onChangeProduto($event)" >
+                                            <option  value="" selected>Escolha um produto</option>
                                             @for (produto of produtosFiltrados; track $index) {
-                                                <option value="{{produto.id}}">{{produto.nome}} - R$ {{produto.valor | number:'1.2-2'}}</option>
+                                                <option value="{{produto.id}}">{{produto.nome}} </option>
                                             }
-                                            
                                         </select>
                                     </div> 
+                                    @if (produtoKitFestaSelecionado) {
                                     <div class="mb-3">
-                                        <label for="quantidade" class="form-label">Quantidade</label>
-                                        <input type="number" id="quantidade" class="form-control" value="1"
-                                            min="1">                
+                                        <input type="checkbox" class="form-check-input" name="especificarItensKit" id="especificarItensKit" (change)="onEspecificarItensKit()">
+                                        <label for="especificarItensKit" class="form-check-label ms-2">Quero especificar os itens do kit</label>
                                     </div>
-                                     <div class="mb-3">
-                                      <button class="btn btn-primary" type="button">adicionar</button>               
+                                    }
+                                     @if (exibirSelecaoMedidaCopoUnidade) {
+                                    <div class="mb-3">
+                                        <div class="d-flex gap-4 align-items-center">
+                                            <div class="form-check">
+                                                <input type="radio" class="form-check-input" name="medida" id="medidaCento" value="cento">
+                                                <label for="medidaCento" class="form-check-label ms-2">Cento</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="radio" class="form-check-input" name="medida" id="meioCento" value="meioCento">
+                                                <label for="meioCento" class="form-check-label ms-2">Meio cento</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="radio" class="form-check-input" name="medida" id="medidaCopo" value="copo">
+                                                <label for="medidaCopo" class="form-check-label ms-2">Copo(12 unid)</label>
+                                            </div>
+                                        </div>
                                     </div>
+                                    }
+                                    <div class="mb-3">
+                                        <button class="btn btn-primary" type="button" (click)="onAdicionarProduto"> Adicionar</button>               
+                                    </div>
+                            <div class="mb-3">
+                                <h5>Produtos do Pedido</h5>
+                            @if (produtosPedido.length > 0) {
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Produto</th>
+                                            <th>Quantidade</th>
+                                            <th>Valor Unitário</th>
+                                            <th>Total</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (item of produtosPedido; track $index) {
+                                            <tr>
+                                                <td>{{item.produto.nome}}</td>
+                                                <td>
+                                                    <input type="number" min="1" [value]="item.quantidade" (input)="onAlterarQuantidade(item.produto.id, +getInputValue($event))">
+                                                </td>
+                                                <td>R$ {{item.produto.valor | number:'1.2-2'}}</td>
+                                                <td>R$ {{(item.produto.valor * item.quantidade) | number:'1.2-2'}}</td>
+                                                <td>
+                                                    <button class="btn btn-danger btn-sm" (click)="onRemoverProduto(item.produto.id)"><i class="bi bi-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }@else {
+                                    <div class="mt-3">
+                                         <div class="text-muted">Nenhum produto adicionado ao pedido.</div>
+                                    </div>
+                                }
+                               
+                            </div>
                                 </div>
                             </div>
 
