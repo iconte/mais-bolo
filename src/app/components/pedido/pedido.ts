@@ -1,12 +1,16 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { DecimalPipe, CommonModule } from '@angular/common';
-import { ProdutoService } from '../../produto.service';
 import { Produto } from '../../model/produto';
 import { Categoria } from '../../model/categoria';
+import { FormsModule } from '@angular/forms';
+import { Cliente } from '../../model/cliente';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { PedidoService } from './pedido.service';
+import { ProdutoService } from '../produto.service';
 
 @Component({
   selector: 'app-pedido',
-  imports: [DecimalPipe, CommonModule],
+  imports: [DecimalPipe, CommonModule, FormsModule, NgxMaskDirective, NgxMaskPipe],
   templateUrl: './pedido.html',
   styleUrl: './pedido.css'
 })
@@ -16,19 +20,23 @@ export class Pedido implements OnInit {
   passo1: number = 0;
   passo2: number = 1;
   passo3: number = 2;
+  dadosClientePedido:Cliente = new Cliente();
+  produtosPedido: Array<{ produto: Produto; quantidade: number }> = [];
+  observacaoPedido: string = '';
   dadosProduto: Produto[] = [];
   dadosCategoria: Categoria[] = [];
   produtosFiltrados: Produto[] = [];
   categoriaSelecionada: number | null = null;
-  produtoSelecionado:number | null = null;
-  produtosPedido: Array<{ produto: Produto; quantidade: number }> = [];
+  produtoSelecionado: Produto | null = null;
+  idProdutoSelecionado: number | null = null;
   quantidadeSelecionada: number = 1;
   produtoKitFestaSelecionado: boolean = false;
   exibirItensKit: boolean = false;
   exibirSelecaoMedidaCopoUnidade: boolean = false;
+  valorSelecionadoMedida: string | null = null;
 
 
-  constructor(private produtoService: ProdutoService) {
+  constructor(private produtoService: ProdutoService, private pedidoService: PedidoService) {
     this.passoAtual = 0;
 
   }
@@ -138,15 +146,22 @@ export class Pedido implements OnInit {
   }
 
   onAdicionarProduto() {
-    const produto = this.produtosFiltrados.find(p => p.id === this.produtoSelecionado);
+    const produtoId = this.idProdutoSelecionado && Number(this.idProdutoSelecionado);
+    const produto = this.produtosFiltrados.find(p => p.id === produtoId);
     if (!produto) return;
     const existente = this.produtosPedido.find(item => item.produto.id === produto.id);
+    if(this.exibirSelecaoMedidaCopoUnidade){
+        this.quantidadeSelecionada = Number(this.valorSelecionadoMedida);
+      }
     if (existente) {
       existente.quantidade += this.quantidadeSelecionada;
     } else {
       this.produtosPedido.push({ produto, quantidade: this.quantidadeSelecionada });
+      console.log("produtos do pedido:",this.produtosPedido);
     }
-    this.quantidadeSelecionada = 1;
+     
+      this.quantidadeSelecionada = 1;
+    
   }
 
   onRemoverProduto(produtoId: number) {
@@ -178,4 +193,8 @@ export class Pedido implements OnInit {
     return (event.target as HTMLInputElement)?.value || '';
   }
 
+  confirmarPedido() {
+    
+  }
+   
   }

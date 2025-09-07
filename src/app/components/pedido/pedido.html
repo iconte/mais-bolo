@@ -70,11 +70,11 @@
                     @if(mostrarPasso(passo1)) {
                           
                         <div id="step1" class="wizard-step "  [class.d-none]="passoAtual!=passo1"  >
-                            <form id="clientForm" novalidate>
+                            <form id="clientForm" novalidate  name="clientForm">
                                 <div class=" mb-3">
                                     <label for="nome" class="form-label">Nome Completo <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="nome" required>
+                                    <input type="text" class="form-control" id="nome" required [(ngModel)]="dadosClientePedido.nome" name="nome">
                                     <div class="invalid-feedback">
                                         Por favor, informe seu nome completo.
                                     </div>
@@ -86,8 +86,9 @@
                                                 class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                            <input type="tel" class="form-control" id="telefone"
-                                                placeholder="(11) 99999-9999" required>
+                                                <input type="tel" class="form-control" id="telefone"
+                                                    placeholder="(99) 99999-9999" required [(ngModel)]="dadosClientePedido.telefone" name="telefone"
+                                                    mask="(00) 00000-0000">
                                             <div class="invalid-feedback">
                                                 Por favor, informe seu telefone.
                                             </div>
@@ -95,7 +96,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="cep" class="form-label">CEP</label>
-                                        <input type="text" class="form-control" id="cep" placeholder="00000-000">
+                                        <input type="text" class="form-control" id="cep" placeholder="00000-000" mask="00000-000" [(ngModel)]="dadosClientePedido.cep" name="cep">
                                     </div>
                                 </div>
 
@@ -103,7 +104,7 @@
                                     <label for="endereco" class="form-label">Endereço</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
-                                        <input type="text" class="form-control" id="endereco"
+                                        <input type="text" class="form-control" id="endereco" [(ngModel)]="dadosClientePedido.endereco" name="endereco"
                                             placeholder="Rua, número, bairro">
                                     </div>
                                 </div>
@@ -111,18 +112,18 @@
                                 <div class="row mb-3">
                                     <div class="col-md-6">
                                         <label for="bairro" class="form-label">Bairro</label>
-                                        <input type="text" class="form-control" id="bairro" placeholder="Seu Bairro">
+                                        <input type="text" class="form-control" id="bairro" placeholder="Seu Bairro" [(ngModel)]="dadosClientePedido.bairro" name="bairro">
 
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="referencia" class="form-label">Referência</label>
-                                        <input type="text" class="form-control" id="referencia" placeholder="em frente a uma ..">
+                                        <label for="complemento" class="form-label">Complemento</label>
+                                        <input type="text" class="form-control" id="complemento" placeholder="em frente a uma .." [(ngModel)]="dadosClientePedido.complemento" name="complemento">
 
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="cidade" class="form-label">Cidade</label>
-                                    <input type="text" class="form-control" id="cidade" placeholder="Sua cidade">
+                                    <input type="text" class="form-control" id="cidade" placeholder="Sua cidade" [(ngModel)]="dadosClientePedido.cidade" name="cidade">
                                 </div>
                             </form>
                         </div>
@@ -149,7 +150,7 @@
                                     <h5 class="mb-3  pb-3">Produtos Disponíveis</h5>
                                         <div class="mb-1">
                                         <label for="produtoSelect" class="form-label">Selecione um Produto</label>
-                                        <select id="produtoSelect" class="form-select w-50"   (change)="onChangeProduto($event)" >
+                                        <select id="produtoSelect" class="form-select w-50"   (change)="onChangeProduto($event)" [(ngModel)]="idProdutoSelecionado" name="produtoSelect">
                                             <option  value="" selected>Escolha um produto</option>
                                             @for (produto of produtosFiltrados; track $index) {
                                                 <option value="{{produto.id}}">{{produto.nome}} </option>
@@ -166,22 +167,22 @@
                                     <div class="mb-3">
                                         <div class="d-flex gap-4 align-items-center">
                                             <div class="form-check">
-                                                <input type="radio" class="form-check-input" name="medida" id="medidaCento" value="cento">
+                                                <input type="radio" class="form-check-input" checked="checked" value="100" [(ngModel)]="valorSelecionadoMedida" name="chkMedida" id="medidaCento">
                                                 <label for="medidaCento" class="form-check-label ms-2">Cento</label>
                                             </div>
                                             <div class="form-check">
-                                                <input type="radio" class="form-check-input" name="medida" id="meioCento" value="meioCento">
+                                                <input type="radio" class="form-check-input" value="50" [(ngModel)]="valorSelecionadoMedida" name="chkMedida" id="meioCento">
                                                 <label for="meioCento" class="form-check-label ms-2">Meio cento</label>
                                             </div>
                                             <div class="form-check">
-                                                <input type="radio" class="form-check-input" name="medida" id="medidaCopo" value="copo">
+                                                <input type="radio" class="form-check-input" value="12" [(ngModel)]="valorSelecionadoMedida" name="chkMedida" id="medidaCopo">
                                                 <label for="medidaCopo" class="form-check-label ms-2">Copo(12 unid)</label>
                                             </div>
                                         </div>
                                     </div>
                                     }
                                     <div class="mb-3">
-                                        <button class="btn btn-primary" type="button" (click)="onAdicionarProduto"> Adicionar</button>               
+                                        <button class="btn btn-primary" type="button" (click)="onAdicionarProduto()"> Adicionar</button>               
                                     </div>
                             <div class="mb-3">
                                 <h5>Produtos do Pedido</h5>
@@ -199,9 +200,9 @@
                                     <tbody>
                                         @for (item of produtosPedido; track $index) {
                                             <tr>
-                                                <td>{{item.produto.nome}}</td>
-                                                <td>
-                                                    <input type="number" min="1" [value]="item.quantidade" (input)="onAlterarQuantidade(item.produto.id, +getInputValue($event))">
+                                                <td class="w-25">{{item.produto.nome}}</td>
+                                                <td >
+                                                    <input type="number"  class="form-control w-50"  [(value)]="item.quantidade" (input)="onAlterarQuantidade(item.produto.id, +getInputValue($event))">
                                                 </td>
                                                 <td>R$ {{item.produto.valor | number:'1.2-2'}}</td>
                                                 <td>R$ {{(item.produto.valor * item.quantidade) | number:'1.2-2'}}</td>
@@ -275,7 +276,7 @@
                             <div class="mb-3">
                                 <label for="observacoes" class="form-label">Observações</label>
                                 <textarea class="form-control" id="observacoes" rows="3"
-                                    placeholder="Observações especiais sobre o pedido..."></textarea>
+                                    placeholder="Observações especiais sobre o pedido..." [(ngModel)]="observacaoPedido"></textarea>
                             </div>
                         </div>
                     }
@@ -294,8 +295,25 @@
                                     <h6 class="mb-0"><i class="bi bi-person me-2"></i>Dados do Cliente</h6>
                                 </div>
                                 <div class="card-body">
-                                    <div id="clientSummary" class="row">
-                                        <!-- Dados serão inseridos via JavaScript -->
+                                    <div id="clientSummary" class="row g-3 align-items-center justify-content-between">
+                                        <div class="col-md-12">
+                                            <strong>Nome:</strong> {{ dadosClientePedido.nome }}
+                                        </div>
+                                        <div class="col-md-12">
+                                            <strong>Endereço:</strong> {{ dadosClientePedido.endereco }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            <strong>Bairro:</strong> {{ dadosClientePedido.bairro }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            <strong>Cidade:</strong> {{ dadosClientePedido.cidade }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            <strong>Cep:</strong> {{ dadosClientePedido.cep| mask:'00000-000' }}
+                                        </div>
+                                        <div class="col-md-12">
+                                            <strong>Telefone:</strong> {{ dadosClientePedido.telefone | mask:'(00) 00000-0000' }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -306,8 +324,15 @@
                                     <h6 class="mb-0"><i class="bi bi-cart me-2"></i>Resumo do Pedido</h6>
                                 </div>
                                 <div class="card-body">
-                                    <div id="orderSummary">
-                                        <!-- Pedido será inserido via JavaScript -->
+                                    <div id="orderSummary" class="row g-3 align-items-center justify-content-between">
+                                        @for (item of produtosPedido; track $index) {
+                                            <div class="col-md-6">
+                                                <strong>Produto:</strong> {{ item.produto.nome }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <strong>Quantidade:</strong> {{ item.quantidade }}
+                                        </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -322,9 +347,16 @@
                             <button type="button" class="btn btn-outline-secondary" id="prevBtn" (click)="anterior()">
                                 <i class="bi bi-arrow-left me-1"></i> Anterior
                             </button>
-                            <button type="button" class="btn btn-primary" id="nextBtn" (click)="proximo()">
+                            @if(passo3==passoAtual){
+                                <button type="button" class="btn btn-primary" id="nextBtn" data-bs-toggle="modal" data-bs-target="#successModal">
+                                Confirmar <i class="bi bi-check-circle-fill ms-1"></i>
+                                </button>
+                            }@else{
+                                <button type="button" class="btn btn-primary" id="nextBtn" (click)="proximo()">
                                 Próximo <i class="bi bi-arrow-right ms-1"></i>
                             </button>
+                            }
+                            
                         </div>
                     </div>
                 </div>
@@ -339,8 +371,7 @@
                 <div class="modal-body text-center py-4">
                     <i class="bi bi-check-circle-fill text-success mb-3" style="font-size: 3rem;"></i>
                     <h4 class="mb-3">Pedido Finalizado!</h4>
-                    <p class="text-muted mb-4">Seu pedido foi registrado com sucesso. Você receberá uma confirmação por
-                        e-mail.</p>
+                    <p class="text-muted mb-4">Seu pedido foi registrado com sucesso.</p>
                     <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
                 </div>
             </div>
