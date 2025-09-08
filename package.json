@@ -8,7 +8,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "prod":"node app.js"
+    "prod":"node server.js"
   },
   "private": true,
   "dependencies": {
