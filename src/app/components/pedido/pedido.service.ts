@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { Cliente } from '../../model/cliente';
+import { Pedido } from '../../model/pedido';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +13,8 @@ export class PedidoService {
 
   constructor(private http: HttpClient) { }
 
-  criarPedido(dadosPedido: any, dadosClientePedido: any) {
-    
+  criarPedido(dadosPedido: Pedido, dadosClientePedido: Cliente) {
+
     return this.http.post(this.url, { dadosPedido, dadosClientePedido });
   }
 
