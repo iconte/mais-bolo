@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "prototipo-mais-bolo": {
+    "mais-bolo": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -62,10 +62,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "prototipo-mais-bolo:build:production"
+              "buildTarget": "mais-bolo:build:production"
             },
             "development": {
-              "buildTarget": "prototipo-mais-bolo:build:development"
+              "buildTarget": "mais-bolo:build:development"
             }
           },
           "defaultConfiguration": "development"
