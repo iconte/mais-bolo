@@ -6,8 +6,8 @@
     "start": "ng serve",
     "dev": "concurrently \"ng serve\" \"json-server --watch db.json --port 3000\"",
     "build": "ng build",
-    "copy:server": "copyfiles server.js dist",
-    "build:all": "npm run build && npm run copy:server",
+    "copy:server": "copyfiles server.js dist/mais-bolo",
+    "build:all": "npm run build && npm run copy:server &&npm run prod",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "prod": "node server.js"

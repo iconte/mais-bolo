@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-const distPath = path.join(__dirname, 'mais-bolo/browser');
+const distPath = path.join(__dirname, 'dist/mais-bolo/browser');
 
 // Servir arquivos estáticos da pasta dist
 app.use(express.static(distPath));
