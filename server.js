@@ -8,7 +8,7 @@ const distPath = path.join(__dirname, 'mais-bolo/browser');
 app.use(express.static(distPath));
 
 // Redirecionar todas as rotas para index.html (SPA)
-app.get('/', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });
 
