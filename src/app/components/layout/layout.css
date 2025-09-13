@@ -1,0 +1,11 @@
+/* Estilos para o layout com menu lateral e barra superior */
+.bg-primary {
+  background-color: #007bff !important;
+}
+.text-primary {
+  color: #007bff !important;
+}
+.nav-link.active {
+  font-weight: bold;
+  background: rgba(255,255,255,0.1);
+}

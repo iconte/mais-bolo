@@ -1,0 +1,39 @@
+<div class="d-flex" style="min-height: 100vh;">
+  <!-- Menu lateral -->
+  <nav class="bg-primary text-white p-3 d-flex flex-column justify-content-between" style="width: 220px; min-height: 100vh;">
+    <div>
+      <div class="mb-4 text-center">
+       <h2> <a [href]="''   " class="nav-link text-white">Mais bolo</a></h2>
+      </div>
+      <ul class="nav flex-column">
+      <li class="nav-item mb-2">
+        <a class="nav-link text-white" [class.active]="isActive('/pedido')" (click)="navigateTo('pedido')" style="cursor:pointer"><i class="bi bi-file-earmark-text me-2"></i>Novo Pedido</a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link text-white" [class.active]="isActive('/produtos')" (click)="navigateTo('produtos')" style="cursor:pointer"><i class="bi bi-cart me-2"></i>Produtos</a>
+      </li>
+        <li class="nav-item mb-2">
+        <a class="nav-link text-white" [class.active]="isActive('/categorias')" (click)="navigateTo('categorias')" style="cursor:pointer"><i class="bi bi-folder me-2"></i>Categorias</a>
+      </li>
+      <li class="nav-item mb-2">
+        <a class="nav-link text-white" [class.active]="isActive('/clientes')" (click)="navigateTo('clientes')" style="cursor:pointer"><i class="bi bi-people me-2"></i>Clientes</a>
+      </li>
+    
+       <li class="nav-item mb-2">
+         <button class="btn btn-outline-light w-100" type="button" (click)="logout()">
+        <i class="bi bi-box-arrow-right me-2"></i>Sair
+        </button>
+    </li>
+      <!-- Adicione mais itens conforme necessário -->
+      </ul>
+    </div>
+    
+  </nav>
+
+  <!-- Conteúdo principal -->
+  <div class="flex-grow-1">
+    <main class="p-4">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
