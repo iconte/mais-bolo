@@ -20,7 +20,10 @@ export class Pedido implements OnInit {
   passo1: number = 0;
   passo2: number = 1;
   passo3: number = 2;
-  dadosClientePedido:Cliente = new Cliente();
+  isDelivery: boolean = false;
+  formaPagamento: string = 'dinheiro'; // Valor padrão
+  dadosCliente:Cliente = new Cliente();
+  dadosPedido: any = {};
   produtosPedido: Array<{ produto: Produto; quantidade: number }> = [];
   observacaoPedido: string = '';
   dadosProduto: Produto[] = [];
@@ -34,7 +37,9 @@ export class Pedido implements OnInit {
   exibirItensKit: boolean = false;
   exibirSelecaoMedidaCopoUnidade: boolean = false;
   valorSelecionadoMedida: string | null = null;
-
+  exibirTelaSucesso: boolean = false;
+  exibirTelaErro: boolean = false;
+  mensagemErro: string = '';
 
   constructor(private produtoService: ProdutoService, private pedidoService: PedidoService) {
     this.passoAtual = 0;
@@ -65,6 +70,18 @@ export class Pedido implements OnInit {
   }
 
   proximo() {
+    // Se estiver no passo 1, valida o formulário antes de avançar
+    if (this.passoAtual === this.passo1) {
+      const form: HTMLFormElement | null = document.querySelector('#clientForm');
+      if (form) {
+        if (!form.checkValidity()) {
+          form.classList.add('was-validated');
+          return;
+        } else {
+          form.classList.remove('was-validated');
+        }
+      }
+    }
     this.passoAtual++;
     this.validarPassoAtual();
   }
@@ -121,7 +138,7 @@ export class Pedido implements OnInit {
      this.desabilitarExibirSelecaoMedidaCopoUnidade();
       return;
     }
-    const produtoSelecionado = this.produtosFiltrados.find(p => p.id === produtoId);
+    const produtoSelecionado = this.produtosFiltrados.find(p => p.idProduto === produtoId);
   if (produtoSelecionado) {
     const categoriaKitFesta = this.dadosCategoria.find(cat => cat.descricao === 'Kits de Festa');
     const categoriasExcluidas = ['Bolos', 'Kits de Festa', 'Descartáveis'];
@@ -147,9 +164,9 @@ export class Pedido implements OnInit {
 
   onAdicionarProduto() {
     const produtoId = this.idProdutoSelecionado && Number(this.idProdutoSelecionado);
-    const produto = this.produtosFiltrados.find(p => p.id === produtoId);
+    const produto = this.produtosFiltrados.find(p => p.idProduto === produtoId);
     if (!produto) return;
-    const existente = this.produtosPedido.find(item => item.produto.id === produto.id);
+    const existente = this.produtosPedido.find(item => item.produto.idProduto === produto.idProduto);
     if(this.exibirSelecaoMedidaCopoUnidade){
         this.quantidadeSelecionada = Number(this.valorSelecionadoMedida);
       }
@@ -165,11 +182,11 @@ export class Pedido implements OnInit {
   }
 
   onRemoverProduto(produtoId: number) {
-    this.produtosPedido = this.produtosPedido.filter(item => item.produto.id !== produtoId);
+    this.produtosPedido = this.produtosPedido.filter(item => item.produto.idProduto !== produtoId);
   }
 
   onAlterarQuantidade(produtoId: number, novaQtd: number) {
-    const item = this.produtosPedido.find(p => p.produto.id === produtoId);
+    const item = this.produtosPedido.find(p => p.produto.idProduto === produtoId);
     if (item && novaQtd > 0) {
       item.quantidade = novaQtd;
     }
@@ -180,6 +197,35 @@ export class Pedido implements OnInit {
     if (checkbox) {
       this.exibirItensKit = checkbox.checked;
     }
+  }
+
+  onClicarConfirmar(){
+    this.dadosPedido.itens = this.produtosPedido;
+    this.dadosPedido.observacao = this.observacaoPedido;
+    this.dadosPedido.formaPagamento = this.formaPagamento;
+    this.dadosPedido.isDelivery = this.isDelivery;
+
+    this.pedidoService.criarPedido( this.dadosCliente, this.dadosPedido).subscribe({
+      next: (response) => {
+        console.log('Pedido criado com sucesso:', response);
+        this.exibirTelaSucesso = true;
+      },
+      error: (response) => {
+        this.mensagemErro = response.message || 'Erro ao criar pedido. Por favor, tente novamente.';
+        response.error && (this.mensagemErro += '\n Detalhes: ' + response.error.message);
+        this.exibirTelaErro = true;
+        console.error('Erro ao criar pedido:', this.mensagemErro);
+      }
+    });
+  }
+
+  fecharTelaSucesso() {
+    this.exibirTelaSucesso = false;
+  }
+
+ 
+  fecharTelaErro() {
+    this.exibirTelaErro = false;
   }
 
   desabilitarSelecaoCustomizarKitFesta(){
@@ -193,8 +239,22 @@ export class Pedido implements OnInit {
     return (event.target as HTMLInputElement)?.value || '';
   }
 
-  confirmarPedido() {
-    
+  iniciarNovoPedido() {
+    // Limpa os dados do pedido e volta para o passo 1
+    this.dadosCliente = new Cliente();
+    this.produtosPedido = [];
+    this.observacaoPedido = '';
+    this.categoriaSelecionada = null;
+    this.produtoSelecionado = null;
+    this.idProdutoSelecionado = null;
+    this.quantidadeSelecionada = 1;
+    this.produtoKitFestaSelecionado = false;
+    this.exibirItensKit = false;
+    this.exibirSelecaoMedidaCopoUnidade = false;
+    this.valorSelecionadoMedida = null;
+    this.formaPagamento = 'dinheiro';
+    this.isDelivery = false;
+    this.passoAtual = this.passo1;
   }
    
   }

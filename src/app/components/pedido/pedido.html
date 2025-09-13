@@ -11,51 +11,11 @@
 </head>
 
 <body class="bg-light">
-    <div class="container py-5">
+    <div class="container pt-1 pb-2">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <!-- Header do Wizard -->
-                <div class="text-center mb-5">
-                    <h1 class="display-5 fw-bold text-primary mb-3">Fazer Pedido</h1>
-                    <p class="lead text-muted">Complete as etapas para finalizar seu pedido</p>
-                </div>
-
-                <!-- Indicador de Progresso -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <div class="progress mb-4" style="height: 8px;">
-                            <div class="progress-bar bg-primary" id="progressBar" role="progressbar" style="width: 33%">
-                            </div>
-                        </div>
-
-                        <div class="row text-center">
-                            <div class="col-4">
-                                <div class="step-indicator" id="step1-indicator" [class.active]="passoAtual==0">
-                                    <div class="step-circle">
-                                        <i class="bi bi-person-fill"></i>
-                                    </div>
-                                    <small class="d-block mt-2 fw-medium">Dados do Cliente</small>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="step-indicator" id="step2-indicator" [class.active]="passoAtual==1">
-                                    <div class="step-circle">
-                                        <i class="bi bi-cart-fill"></i>
-                                    </div>
-                                    <small class="d-block mt-2 fw-medium">Pedido</small>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="step-indicator" id="step3-indicator" [class.active]="passoAtual==2">
-                                    <div class="step-circle">
-                                        <i class="bi bi-check-circle-fill"></i>
-                                    </div>
-                                    <small class="d-block mt-2 fw-medium">Finalização</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
+               
 
                 <!-- Conteúdo das Etapas -->
                 <div class="card shadow">
@@ -74,7 +34,7 @@
                                 <div class=" mb-3">
                                     <label for="nome" class="form-label">Nome Completo <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="nome" required [(ngModel)]="dadosClientePedido.nome" name="nome">
+                                    <input type="text" class="form-control" id="nome" placeholder="Nome Cliente" required [(ngModel)]="dadosCliente.nome" name="nome">
                                     <div class="invalid-feedback">
                                         Por favor, informe seu nome completo.
                                     </div>
@@ -87,43 +47,55 @@
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="bi bi-telephone"></i></span>
                                                 <input type="tel" class="form-control" id="telefone"
-                                                    placeholder="(99) 99999-9999" required [(ngModel)]="dadosClientePedido.telefone" name="telefone"
+                                                    placeholder="(99) 99999-9999" required [(ngModel)]="dadosCliente.telefone" name="telefone"
                                                     mask="(00) 00000-0000">
                                             <div class="invalid-feedback">
-                                                Por favor, informe seu telefone.
+                                                Por favor, informe o telefone.
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="cep" class="form-label">CEP</label>
-                                        <input type="text" class="form-control" id="cep" placeholder="00000-000" mask="00000-000" [(ngModel)]="dadosClientePedido.cep" name="cep">
+                                        <input type="text" class="form-control" id="cep" placeholder="00000-000" mask="00000-000" [(ngModel)]="dadosCliente.cep" name="cep">
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="endereco" class="form-label">Endereço</label>
+                                    <label for="endereco" class="form-label">Endereço  <span
+                                                class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
-                                        <input type="text" class="form-control" id="endereco" [(ngModel)]="dadosClientePedido.endereco" name="endereco"
-                                            placeholder="Rua, número, bairro">
+                                        <input type="text" class="form-control" id="endereco" [(ngModel)]="dadosCliente.endereco" name="endereco"
+                                            placeholder="Rua, número, bairro" required>
+                                            <div class="invalid-feedback">
+                                                Por favor, informe o endereco.
+                                            </div>
                                     </div>
+                                    
                                 </div>
 
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label for="bairro" class="form-label">Bairro</label>
-                                        <input type="text" class="form-control" id="bairro" placeholder="Seu Bairro" [(ngModel)]="dadosClientePedido.bairro" name="bairro">
-
+                                        <label for="bairro" class="form-label">Bairro <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="bairro" placeholder="Seu Bairro" [(ngModel)]="dadosCliente.bairro" name="bairro">
+                                          <div class="invalid-feedback">
+                                                Por favor, informe o bairro.
+                                            </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="complemento" class="form-label">Complemento</label>
-                                        <input type="text" class="form-control" id="complemento" placeholder="em frente a uma .." [(ngModel)]="dadosClientePedido.complemento" name="complemento">
+                                        <input type="text" class="form-control" id="complemento" placeholder="em frente a uma .." [(ngModel)]="dadosCliente.complemento" name="complemento">
 
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="cidade" class="form-label">Cidade</label>
-                                    <input type="text" class="form-control" id="cidade" placeholder="Sua cidade" [(ngModel)]="dadosClientePedido.cidade" name="cidade">
+                                    <label for="cidade" class="form-label">Cidade <span
+                                                class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="cidade" placeholder="Sua cidade" [(ngModel)]="dadosCliente.cidade" name="cidade">
+                                        <div class="invalid-feedback">
+                                            Por favor, informe a cidade.
+                                        </div>
                                 </div>
                             </form>
                         </div>
@@ -136,9 +108,8 @@
                         <div id="step2" class="wizard-step" [class.d-none]="passoAtual!=passo2">
                             <div class="row">
                                 <div class="col-md-12">
-                                     <h5 class="mb-3">Categorias Disponíveis</h5>
                                         <div class="mb-3">
-                                        <label for="categoriaSelect" class="form-label">Selecione uma Categoria</label>
+                                        <label for="categoriaSelect" class="form-label">Selecione uma Categoria de produto</label>
                                         <select id="categoriaSelect" class="form-select w-50" (change)="onCategoriaChange($event)">
                                             <option  value="" selected>Escolha uma categoria</option>
                                             @for (categoria of dadosCategoria; track $index) {
@@ -147,13 +118,12 @@
                                             
                                         </select>
                                     </div> 
-                                    <h5 class="mb-3  pb-3">Produtos Disponíveis</h5>
                                         <div class="mb-1">
                                         <label for="produtoSelect" class="form-label">Selecione um Produto</label>
                                         <select id="produtoSelect" class="form-select w-50"   (change)="onChangeProduto($event)" [(ngModel)]="idProdutoSelecionado" name="produtoSelect">
                                             <option  value="" selected>Escolha um produto</option>
                                             @for (produto of produtosFiltrados; track $index) {
-                                                <option value="{{produto.id}}">{{produto.nome}} </option>
+                                                <option value="{{produto.idProduto}}">{{produto.nome}} </option>
                                             }
                                         </select>
                                     </div> 
@@ -167,16 +137,16 @@
                                     <div class="mb-3">
                                         <div class="d-flex gap-4 align-items-center">
                                             <div class="form-check">
-                                                <input type="radio" class="form-check-input" checked="checked" value="100" [(ngModel)]="valorSelecionadoMedida" name="chkMedida" id="medidaCento">
-                                                <label for="medidaCento" class="form-check-label ms-2">Cento</label>
+                                                <input type="radio" class="form-check-input" value="100" [(ngModel)]="valorSelecionadoMedida" name="chkMedida" checked>
+                                                <label for="medidaCento" class="form-check-label ms-1">Cento</label>
                                             </div>
                                             <div class="form-check">
-                                                <input type="radio" class="form-check-input" value="50" [(ngModel)]="valorSelecionadoMedida" name="chkMedida" id="meioCento">
-                                                <label for="meioCento" class="form-check-label ms-2">Meio cento</label>
+                                                <input type="radio" class="form-check-input" value="50" [(ngModel)]="valorSelecionadoMedida" name="chkMedida" >
+                                                <label for="meioCento" class="form-check-label ms-1">Meio cento</label>
                                             </div>
                                             <div class="form-check">
-                                                <input type="radio" class="form-check-input" value="12" [(ngModel)]="valorSelecionadoMedida" name="chkMedida" id="medidaCopo">
-                                                <label for="medidaCopo" class="form-check-label ms-2">Copo(12 unid)</label>
+                                                <input type="radio" class="form-check-input" value="12" [(ngModel)]="valorSelecionadoMedida" name="chkMedida">
+                                                <label for="medidaCopo" class="form-check-label ms-1">Copo(12 unid)</label>
                                             </div>
                                         </div>
                                     </div>
@@ -202,12 +172,12 @@
                                             <tr>
                                                 <td class="w-25">{{item.produto.nome}}</td>
                                                 <td >
-                                                    <input type="number"  class="form-control w-50"  [(value)]="item.quantidade" (input)="onAlterarQuantidade(item.produto.id, +getInputValue($event))">
+                                                    <input type="number"  class="form-control w-50"  [(value)]="item.quantidade" (input)="onAlterarQuantidade(item.produto.idProduto, +getInputValue($event))">
                                                 </td>
                                                 <td>R$ {{item.produto.valor | number:'1.2-2'}}</td>
                                                 <td>R$ {{(item.produto.valor * item.quantidade) | number:'1.2-2'}}</td>
                                                 <td>
-                                                    <button class="btn btn-danger btn-sm" (click)="onRemoverProduto(item.produto.id)"><i class="bi bi-trash"></i></button>
+                                                    <button class="btn btn-danger btn-sm" (click)="onRemoverProduto(item.produto.idProduto)"><i class="bi bi-trash"></i></button>
                                                 </td>
                                             </tr>
                                         }
@@ -230,15 +200,15 @@
                                     <label class="form-label fw-medium">Tipo de Entrega</label>
                                     <div class="mt-2">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="entrega" id="balcao"
-                                                value="balcao" checked>
+                                            <input class="form-check-input" type="radio" name="tipoEntrega" id="balcao"
+                                                [checked]="!isDelivery" [value]="false" [(ngModel)]="isDelivery">
                                             <label class="form-check-label" for="balcao">
                                                 <i class="bi bi-shop me-1"></i> Retirar no Balcão
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="entrega" id="delivery"
-                                                value="delivery">
+                                            <input class="form-check-input" type="radio" name="tipoEntrega" id="delivery"
+                                                   [checked]="isDelivery" [value]="true" [(ngModel)]="isDelivery">
                                             <label class="form-check-label" for="delivery">
                                                 <i class="bi bi-truck me-1"></i> Delivery
                                             </label>
@@ -250,21 +220,21 @@
                                     <div class="mt-2">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="pagamento" id="dinheiro"
-                                                value="dinheiro" checked>
+                                                value="dinheiro" checked [(ngModel)]="formaPagamento" name="formaPagamento">
                                             <label class="form-check-label" for="dinheiro">
                                                 <i class="bi bi-cash me-1"></i> Dinheiro
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="pagamento" id="cartao"
-                                                value="cartao">
+                                                value="cartao" [(ngModel)]="formaPagamento" name="formaPagamento">
                                             <label class="form-check-label" for="cartao">
                                                 <i class="bi bi-credit-card me-1"></i> Cartão
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="pagamento" id="pix"
-                                                value="pix">
+                                                value="pix" [(ngModel)]="formaPagamento" name="formaPagamento">
                                             <label class="form-check-label" for="pix">
                                                 <i class="bi bi-qr-code me-1"></i> PIX
                                             </label>
@@ -297,22 +267,22 @@
                                 <div class="card-body">
                                     <div id="clientSummary" class="row g-3 align-items-center justify-content-between">
                                         <div class="col-md-12">
-                                            <strong>Nome:</strong> {{ dadosClientePedido.nome }}
+                                            <strong>Nome:</strong> {{ dadosCliente.nome }}
                                         </div>
                                         <div class="col-md-12">
-                                            <strong>Endereço:</strong> {{ dadosClientePedido.endereco }}
+                                            <strong>Endereço:</strong> {{ dadosCliente.endereco }}
                                         </div>
                                         <div class="col-md-4">
-                                            <strong>Bairro:</strong> {{ dadosClientePedido.bairro }}
+                                            <strong>Bairro:</strong> {{ dadosCliente.bairro }}
                                         </div>
                                         <div class="col-md-4">
-                                            <strong>Cidade:</strong> {{ dadosClientePedido.cidade }}
+                                            <strong>Cidade:</strong> {{ dadosCliente.cidade }}
                                         </div>
                                         <div class="col-md-4">
-                                            <strong>Cep:</strong> {{ dadosClientePedido.cep| mask:'00000-000' }}
+                                            <strong>Cep:</strong> {{ dadosCliente.cep| mask:'00000-000' }}
                                         </div>
                                         <div class="col-md-12">
-                                            <strong>Telefone:</strong> {{ dadosClientePedido.telefone | mask:'(00) 00000-0000' }}
+                                            <strong>Telefone:</strong> {{ dadosCliente.telefone | mask:'(00) 00000-0000' }}
                                         </div>
                                     </div>
                                 </div>
@@ -348,7 +318,7 @@
                                 <i class="bi bi-arrow-left me-1"></i> Anterior
                             </button>
                             @if(passo3==passoAtual){
-                                <button type="button" class="btn btn-primary" id="nextBtn" data-bs-toggle="modal" data-bs-target="#successModal">
+                                <button type="button" (click)="onClicarConfirmar()" class="btn btn-primary" id="nextBtn" data-bs-toggle="modal" data-bs-target="#successModal">
                                 Confirmar <i class="bi bi-check-circle-fill ms-1"></i>
                                 </button>
                             }@else{
@@ -364,19 +334,31 @@
         </div>
     </div>
 
-    <!-- Modal de Sucesso -->
-    <div class="modal fade" id="successModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body text-center py-4">
-                    <i class="bi bi-check-circle-fill text-success mb-3" style="font-size: 3rem;"></i>
-                    <h4 class="mb-3">Pedido Finalizado!</h4>
-                    <p class="text-muted mb-4">Seu pedido foi registrado com sucesso.</p>
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
-                </div>
+    <!-- Tela de Sucesso (não modal) -->
+     @if(exibirTelaSucesso) {
+        <div  class="fixed-top d-flex align-items-center justify-content-center" style="background: rgba(0,0,0,0.3); min-height: 100vh; z-index: 9999;">
+            <div class="card shadow-lg text-center p-4" style="max-width: 350px;">
+                <i class="bi bi-check-circle-fill text-success mb-3" style="font-size: 3rem;"></i>
+                <h4 class="mb-3">Pedido Finalizado!</h4>
+                <p class="text-muted mb-4">Seu pedido foi registrado com sucesso.</p>
+                <button type="button" class="btn btn-success mb-2 w-100" (click)="iniciarNovoPedido()">Iniciar Novo Pedido</button>
+                <button type="button" class="btn btn-outline-secondary w-100" (click)="fecharTelaSucesso()">Fechar</button>
             </div>
         </div>
-    </div>
+    }
+    @if(exibirTelaErro){
+        <div  class="fixed-top d-flex align-items-center justify-content-center" style="background: rgba(0,0,0,0.3); min-height: 100vh; z-index: 9999;">
+            <div class="card shadow-lg text-center p-4" style="max-width: 350px;">
+                <i class="bi bi-x-circle-fill text-danger mb-3" style="font-size: 3rem;"></i>
+                <h4 class="mb-3"> Erro ao finalizar Pedido!</h4>
+                <p class="text-muted mb-4">Ocorreu um erro ao registrar seu pedido.</p>
+                <span>{{ mensagemErro }}</span>
+                <button type="button" class="btn btn-success mb-2 w-100" (click)="iniciarNovoPedido()">Iniciar Novo Pedido</button>
+                <button type="button" class="btn btn-outline-secondary w-100" (click)="fecharTelaErro()">Fechar</button>
+            </div>
+        </div>
+    }
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
