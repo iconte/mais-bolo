@@ -10,16 +10,22 @@ import { Pedido } from '../../model/pedido';
 export class PedidoService {
 
   private url:string = `${environment.apiUrl}/pedidos`
+  
+  private cepUrl = `https://viacep.com.br/ws/`;
 
   constructor(private http: HttpClient) { }
 
-  criarPedido(dadosPedido: Pedido, dadosClientePedido: Cliente) {
+  criarPedido(dadosCliente: any, dadosPedido: any) {
 
-    return this.http.post(this.url, { dadosPedido, dadosClientePedido });
+    return this.http.post(this.url, { dadosCliente, dadosPedido });
   }
 
   obterPedidos() {
     return this.http.get(this.url);
+  }
+
+  obterDadosEnderecoPorCep(cep: string) {
+    return this.http.get(`${this.cepUrl}/${cep}/json/`);
   }
 
   obterPedidoPorId(id: string) {
