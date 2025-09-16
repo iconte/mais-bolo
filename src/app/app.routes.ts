@@ -5,6 +5,7 @@ import { Pedido } from './components/pedido/pedido';
 //import { ClientesComponent } from './components/clientes/clientes';
 import { Login } from './components/login/login';
 import { Dashboard } from './components/dashboard/dashboard';
+import { ListaPedido } from './components/lista-pedido/lista-pedido';
 
 
 export const routes: Routes = [
@@ -15,6 +16,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: Dashboard },
       { path: 'pedido', component: Pedido },
+      { path: 'lista-pedido', component: ListaPedido },
      // { path: 'produtos', component: ProdutosComponent },
    //   { path: 'clientes', component: ClientesComponent },
       // ...adicione mais rotas conforme necessário

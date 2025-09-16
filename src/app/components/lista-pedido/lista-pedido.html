@@ -1,0 +1,44 @@
+<div class="container py-4">
+    <h2 class="mb-4">Lista de Pedidos</h2>
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Cliente</th>
+                <th>Forma Pagamento</th>
+                <th>Data</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+       
+            @if(!pedidos || pedidos.length === 0) {
+            <tr>
+                <td colspan="5" class="text-center text-muted">Nenhum pedido encontrado.</td>
+            </tr>
+            }@else{
+                @for (pedido of pedidos; track $index) {
+                <tr>
+                    <td>{{ pedido.id }}</td>
+                    <td>{{ pedido.cliente.nome }}</td>
+                    <td>{{ pedido.formaPagamento }}</td>
+                    <!-- <td>
+                        <span class="badge bg-secondary" *ngIf="pedido.status === 'aberto'">Aberto</span>
+                        <span class="badge bg-warning text-dark" *ngIf="pedido.status === 'andamento'">Em Andamento</span>
+                        <span class="badge bg-success" *ngIf="pedido.status === 'pronto'">Pronto</span>
+                    </td> -->
+                    <td>{{ pedido.dataPedido | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-sm me-2" (click)="visualizarPedido(pedido)"><i
+                                class="bi bi-eye"></i> Visualizar</button>
+                        <button class="btn btn-outline-success btn-sm" (click)="atualizarPedido(pedido)"><i
+                                class="bi bi-pencil"></i> Atualizar</button>
+                    </td>
+                </tr>
+                }
+
+        }
+
+        </tbody>
+    </table>
+</div>
