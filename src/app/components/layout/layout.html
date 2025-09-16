@@ -1,33 +1,37 @@
+<style>
+
+</style>
 <div class="d-flex" style="min-height: 100vh;">
-  <!-- Menu lateral -->
-  <nav class="bg-primary text-white p-3 d-flex flex-column justify-content-between" style="width: 220px; min-height: 100vh;">
+  <!-- Menu lateral recolhível -->
+  <nav class="bg-primary text-white p-3 d-flex flex-column justify-content-between"
+       [ngClass]="{ 'menu-recolhido': !menuExpandido }"
+       (mouseenter)="menuExpandido = true" (mouseleave)="menuExpandido = false"
+       style="width: 220px; min-height: 100vh; transition: width 0.3s;">
     <div>
       <div class="mb-4 text-center">
-       <h2> <a [href]="''   " class="nav-link text-white">Mais bolo</a></h2>
+        <h2><a [href]="''" class="nav-link text-white"><span class="menu-text">Mais bolo</span></a></h2>
       </div>
-      <ul class="nav flex-column">
-      <li class="nav-item mb-2">
-        <a class="nav-link text-white" [class.active]="isActive('/pedido')" (click)="navigateTo('pedido')" style="cursor:pointer"><i class="bi bi-file-earmark-text me-2"></i>Novo Pedido</a>
-      </li>
-      <li class="nav-item mb-2">
-        <a class="nav-link text-white" [class.active]="isActive('/produtos')" (click)="navigateTo('produtos')" style="cursor:pointer"><i class="bi bi-cart me-2"></i>Produtos</a>
-      </li>
+      <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item mb-2">
-        <a class="nav-link text-white" [class.active]="isActive('/categorias')" (click)="navigateTo('categorias')" style="cursor:pointer"><i class="bi bi-folder me-2"></i>Categorias</a>
-      </li>
-      <li class="nav-item mb-2">
-        <a class="nav-link text-white" [class.active]="isActive('/clientes')" (click)="navigateTo('clientes')" style="cursor:pointer"><i class="bi bi-people me-2"></i>Clientes</a>
-      </li>
-    
-       <li class="nav-item mb-2">
-         <button class="btn btn-outline-light w-100" type="button" (click)="logout()">
-        <i class="bi bi-box-arrow-right me-2"></i>Sair
-        </button>
-    </li>
-      <!-- Adicione mais itens conforme necessário -->
+          <a class="nav-link text-white" [class.active]="isActive('/pedido')" (click)="navigateTo('pedido')" style="cursor:pointer"><i class="bi bi-file-earmark-text me-2"></i><span class="menu-text">Novo Pedido</span></a>
+        </li>
+         <li class="nav-item mb-2">
+          <a class="nav-link text-white" [class.active]="isActive('/lista-pedido')" (click)="navigateTo('lista-pedido')" style="cursor:pointer"><i class="bi bi-list-ul me-2"></i><span class="menu-text">Lista de Pedidos</span></a>
+        </li>
+        <li class="nav-item mb-2">
+          <a class="nav-link text-white" [class.active]="isActive('/produtos')" (click)="navigateTo('produtos')" style="cursor:pointer"><i class="bi bi-cart me-2"></i><span class="menu-text">Produtos</span></a>
+        </li>
+        <li class="nav-item mb-2">
+          <a class="nav-link text-white" [class.active]="isActive('/categorias')" (click)="navigateTo('categorias')" style="cursor:pointer"><i class="bi bi-folder me-2"></i><span class="menu-text">Categorias</span></a>
+        </li>
+        <li class="nav-item mb-2">
+          <a class="nav-link text-white" [class.active]="isActive('/clientes')" (click)="navigateTo('clientes')" style="cursor:pointer"><i class="bi bi-people me-2"></i><span class="menu-text">Clientes</span></a>
+        </li>
+        <li class="nav-item mb-2"> <a class="nav-link text-white" (click)="logout()" style="cursor:pointer"><i class="bi bi-box-arrow-right me-2"></i><span class="menu-text">Sair</span></a>
+        </li>
+        <!-- Adicione mais itens conforme necessário -->
       </ul>
     </div>
-    
   </nav>
 
   <!-- Conteúdo principal -->

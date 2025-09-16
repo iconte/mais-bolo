@@ -9,3 +9,21 @@
   font-weight: bold;
   background: rgba(255,255,255,0.1);
 }
+
+  .menu-recolhido {
+    width: 60px !important;
+    transition: width 0.3s;
+  }
+  nav.bg-primary {
+    transition: width 0.3s;
+  }
+  .nav-link span {
+    transition: opacity 0.2s;
+  }
+  .nav-link .menu-text {
+    opacity: 1;
+    transition: opacity 0.2s;
+  }
+  .menu-recolhido .nav-link .menu-text {
+    opacity: 0;
+  }
