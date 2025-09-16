@@ -36,7 +36,7 @@ export class Pedido implements OnInit {
   produtoKitFestaSelecionado: boolean = false;
   exibirItensKit: boolean = false;
   exibirSelecaoMedidaCopoUnidade: boolean = false;
-  valorSelecionadoMedida: string | null = null;
+  valorSelecionadoMedida: string = "100";
   exibirTelaSucesso: boolean = false;
   exibirTelaErro: boolean = false;
   mensagemErro: string = '';
@@ -200,7 +200,11 @@ export class Pedido implements OnInit {
   }
 
   onClicarConfirmar(){
-    this.dadosPedido.itens = this.produtosPedido;
+    this.dadosPedido.itens = this.produtosPedido.map(item => ({
+      idProduto: item.produto.idProduto,
+      quantidade: item.quantidade,
+      observacao: ''
+    }));
     this.dadosPedido.observacao = this.observacaoPedido;
     this.dadosPedido.formaPagamento = this.formaPagamento;
     this.dadosPedido.isDelivery = this.isDelivery;
@@ -251,10 +255,13 @@ export class Pedido implements OnInit {
     this.produtoKitFestaSelecionado = false;
     this.exibirItensKit = false;
     this.exibirSelecaoMedidaCopoUnidade = false;
-    this.valorSelecionadoMedida = null;
+    this.valorSelecionadoMedida = "100";
     this.formaPagamento = 'dinheiro';
     this.isDelivery = false;
     this.passoAtual = this.passo1;
+    this.exibirTelaSucesso = false;
+    this.exibirTelaErro = false;
+    this.mensagemErro = '';
   }
    
   }
